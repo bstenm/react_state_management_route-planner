@@ -30,12 +30,15 @@ export class MapContainer extends React.Component {
 
       render() {
             return (
-                  <div
-                        ref={node => {
-                              this.node = node;
-                        }}
-                        className="MapContainer"
-                  />
+                  <>
+                        <div
+                              ref={node => {
+                                    this.node = node;
+                              }}
+                              className="MapContainer"
+                        />
+                        <div className="MapContainer__loader" />
+                  </>
             );
       }
 }
