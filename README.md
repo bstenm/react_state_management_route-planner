@@ -1,6 +1,6 @@
-React boilerplate with custom linting and prettier for code formatting, testing set up for enzyme, githooks, and continuous integration on top of [Create React App](https://github.com/facebook/create-react-app)
+Route Planner app with custom linting and prettier for code formatting, testing set up for enzyme, githooks, and continuous integration on top of [Create React App](https://github.com/facebook/create-react-app)
 
-[![Build Status](https://travis-ci.org/bstenm/my-react-boilerplate.svg?branch=master)](https://travis-ci.org/bstenm/my-react-boilerplate) [![Coverage Status](https://coveralls.io/repos/github/bstenm/my-react-boilerplate/badge.svg?branch=master)](https://coveralls.io/github/bstenm/my-react-boilerplate?branch=master) [![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=bstenm/my-react-boilerplate)](https://dependabot.com)
+[![Build Status](https://travis-ci.org/bstenm/route-planner.svg?branch=master)](https://travis-ci.org/bstenm/route-planner) [![Coverage Status](https://coveralls.io/repos/github/bstenm/route-planner/badge.svg?branch=master)](https://coveralls.io/github/bstenm/route-planner?branch=master) [![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=bstenm/route-planner)](https://dependabot.com)
 
 #### Githook
 
