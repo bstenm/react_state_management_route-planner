@@ -30,11 +30,18 @@ let props;
 let setViewMock;
 let mapObject;
 let tileLayerAddToMock;
+let clearLayersMock;
+let layerGroupAddToMock;
+let addLayerMock;
 let LeafletMock;
 
 beforeEach(() => {
       setViewMock = jest.fn();
       tileLayerAddToMock = jest.fn();
+      clearLayersMock = jest.fn();
+      addLayerMock = jest.fn();
+      tileLayerAddToMock = jest.fn();
+      layerGroupAddToMock = jest.fn();
 
       let clickEventHandler = null;
 
@@ -50,9 +57,16 @@ beforeEach(() => {
 
       LeafletMock = {
             map: jest.fn(() => mapObject),
+            divIcon: jest.fn(),
+            layerGroup: jest.fn(() => ({
+                  addTo: layerGroupAddToMock,
+                  addLayer: addLayerMock,
+                  clearLayers: clearLayersMock,
+            })),
             tileLayer: jest.fn(() => ({
                   addTo: tileLayerAddToMock,
             })),
+            marker: jest.fn(),
       };
 
       props = {
@@ -125,4 +139,50 @@ it('Displatches an action with lat and lng of new waypoint', () => {
       const { calls } = props.addWaypoint.mock;
       expect(calls.length).toEqual(1);
       expect(calls[0][0]).toEqual(['lat', 'lng']);
+});
+
+describe('Update the markers on map click event', () => {
+      let wrapper;
+
+      beforeEach(() => {
+            wrapper = shallow(<MapContainer {...props} />);
+            wrapper.setProps({
+                  Leaflet: LeafletMock,
+            });
+      });
+
+      // Add markers for each waypoint added
+      it('Adds a marker for each waypoint passed', () => {
+            wrapper.setProps({
+                  waypointList: [['lat1', 'lng1'], ['lat2', 'lng2']],
+            });
+
+            expect(LeafletMock.divIcon).toHaveBeenCalledTimes(2);
+            expect(LeafletMock.marker).toHaveBeenCalledTimes(2);
+
+            // we arrange the markers into a layer group
+            expect(LeafletMock.layerGroup).toHaveBeenCalledTimes(1);
+            expect(LeafletMock.layerGroup.mock.calls[0][0].length).toEqual(2);
+
+            // add the layer group to map
+            expect(layerGroupAddToMock).toHaveBeenCalledTimes(1);
+      });
+
+      // Clears previous markers before adding new ones
+      it('Clear all markers from the map if any', () => {
+            // simulate we add a marker
+            wrapper.setProps({
+                  waypointList: [['lat1', 'lng1']],
+            });
+
+            expect(clearLayersMock.mock.calls.length).toEqual(0);
+
+            // now we add new waypoints, but first the previous one should be cleared
+            wrapper.setProps({
+                  waypointList: [['lat1', 'lng1'], ['lat1', 'lng1']],
+            });
+
+            // this time it was called
+            expect(clearLayersMock.mock.calls.length).toEqual(1);
+      });
 });

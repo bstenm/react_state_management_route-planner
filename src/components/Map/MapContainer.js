@@ -11,6 +11,13 @@ export class MapContainer extends React.Component {
             // initialse the map once the Leaflet lib has been loaded
             if (prevProps.Leaflet !== Leaflet) {
                   this.initialiseMap();
+                  return;
+            }
+
+            // [OPTIMIZATION]: we could update markers only if the list from the redux store has changed
+            // (we can not remove and add a new marker at the same time so comparing the length is good enough)
+            if (this.map) {
+                  this.updateMapMarkers();
             }
       }
 
@@ -37,6 +44,40 @@ export class MapContainer extends React.Component {
             });
       };
 
+      updateMapMarkers = () => {
+            const latlngs = [];
+            const markers = [];
+            const { Leaflet, waypointList } = this.props;
+
+            // clear all markers before re-adding the waypoints
+            // we get from the redux store (no performance
+            // issue noticed even with one hundred markers)
+            if (this.markerGroup) {
+                  this.markerGroup.clearLayers();
+            }
+
+            // re-add all the waypoints set in the redux store
+            waypointList.forEach((coords, idx) => {
+                  const blackDot = Leaflet.divIcon({
+                        className: 'black-dot',
+                        iconSize: cf.mapIconSize,
+                        html: idx + 1,
+                  });
+
+                  // create a new Leaflet marker
+                  const marker = Leaflet.marker(coords, { icon: blackDot });
+
+                  // push into array to enable creation of a layer group
+                  markers.push(marker);
+                  latlngs.push(coords);
+            });
+
+            // defining a layer group allows us to clear all markers easily
+            this.markerGroup = Leaflet.layerGroup(markers);
+
+            this.markerGroup.addTo(this.map);
+      };
+
       render() {
             return (
                   <>
@@ -54,10 +95,12 @@ export class MapContainer extends React.Component {
 
 MapContainer.defaultProps = {
       Leaflet: null,
+      waypointList: [],
 };
 
 MapContainer.propTypes = {
       Leaflet: PropTypes.object,
+      waypointList: PropTypes.array,
       addWaypoint: PropTypes.func.isRequired,
 };
 
