@@ -10,6 +10,7 @@ describe('(Component) WaypointItem', () => {
             props = {
                   id: 9,
                   remove: jest.fn(),
+                  onDragStart: jest.fn(),
             };
             wrapper = shallow(<Component {...props} />);
       });
@@ -31,5 +32,15 @@ describe('(Component) WaypointItem', () => {
             icon.simulate('keyDown');
             expect(props.remove.mock.calls.length).toEqual(2);
             expect(props.remove.mock.calls[1][0]).toEqual(9);
+      });
+
+      // list item prop: onDragStart
+      it('Passes a cb prop for the drag start event to list item component', () => {
+            wrapper
+                  .find('li')
+                  .props()
+                  .onDragStart('arg');
+            expect(props.onDragStart.mock.calls.length).toEqual(1);
+            expect(props.onDragStart.mock.calls[0][0]).toEqual('arg');
       });
 });

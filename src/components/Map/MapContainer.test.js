@@ -110,16 +110,22 @@ it('Uses Leaflet to display a map when Leaflet is loaded', () => {
 
       // display map
       expect(mapObject.setView).toHaveBeenCalledTimes(1);
-      expect(setViewMock).toHaveBeenCalledWith(['latitude', 'longitude'], 'zoom');
+      expect(setViewMock).toHaveBeenCalledWith(
+            ['latitude', 'longitude'],
+            'zoom',
+      );
 
       // tile layer provider called
       expect(LeafletMock.tileLayer).toHaveBeenCalledTimes(1);
-      expect(LeafletMock.tileLayer).toHaveBeenCalledWith('tileLayerApiEndPoint', {
-            id: 'tileLayerId',
-            maxZoom: 'tileLayerMaxZoom',
-            attribution: 'tileLayerAttribution',
-            accessToken: process.env.REACT_APP_MAPBOX_ACCESS_TOKEN,
-      });
+      expect(LeafletMock.tileLayer).toHaveBeenCalledWith(
+            'tileLayerApiEndPoint',
+            {
+                  id: 'tileLayerId',
+                  maxZoom: 'tileLayerMaxZoom',
+                  attribution: 'tileLayerAttribution',
+                  accessToken: process.env.REACT_APP_MAPBOX_ACCESS_TOKEN,
+            },
+      );
 
       // added to map
       expect(tileLayerAddToMock).toHaveBeenCalledTimes(1);
