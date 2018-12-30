@@ -75,6 +75,15 @@ export class MapContainer extends React.Component {
             // defining a layer group allows us to clear all markers easily
             this.markerGroup = Leaflet.layerGroup(markers);
 
+            // add a polyline between each marker if more than one
+            if (latlngs.length > 1) {
+                  const polyline = Leaflet.polyline(latlngs, {
+                        color: cf.polyLineColor,
+                        weight: cf.polylineWeight,
+                  });
+                  this.markerGroup.addLayer(polyline);
+            }
+
             this.markerGroup.addTo(this.map);
       };
 

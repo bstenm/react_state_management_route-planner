@@ -11,5 +11,5 @@ beforeEach(() => {
 });
 
 it('Displays a WaypointPanel', () => {
-      expect(wrapper.find('.WaypointPanel').length).toEqual(1);
+      expect(wrapper.find('.WaypointPanel')).toHaveLength(1);
 });

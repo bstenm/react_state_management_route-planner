@@ -27,19 +27,21 @@ jest.mock('../../config', () => ({
 }));
 
 let props;
-let setViewMock;
 let mapObject;
-let tileLayerAddToMock;
-let clearLayersMock;
-let layerGroupAddToMock;
+let setViewMock;
 let addLayerMock;
+let clearLayersMock;
+let polylineAddToMock;
+let tileLayerAddToMock;
+let layerGroupAddToMock;
 let LeafletMock;
 
 beforeEach(() => {
       setViewMock = jest.fn();
-      tileLayerAddToMock = jest.fn();
-      clearLayersMock = jest.fn();
       addLayerMock = jest.fn();
+      clearLayersMock = jest.fn();
+      polylineAddToMock = jest.fn();
+      tileLayerAddToMock = jest.fn();
       tileLayerAddToMock = jest.fn();
       layerGroupAddToMock = jest.fn();
 
@@ -67,6 +69,9 @@ beforeEach(() => {
                   addTo: tileLayerAddToMock,
             })),
             marker: jest.fn(),
+            polyline: jest.fn(() => ({
+                  addTo: polylineAddToMock,
+            })),
       };
 
       props = {
@@ -78,20 +83,20 @@ beforeEach(() => {
 // MapContainer
 it('Displays a MapContainer', () => {
       const wrapper = shallow(<MapContainer {...props} />);
-      expect(wrapper.find('.MapContainer').length).toEqual(1);
+      expect(wrapper.find('.MapContainer')).toHaveLength(1);
 });
 
 // Loader
 it('Displays a loader', () => {
       const wrapper = shallow(<MapContainer {...props} />);
-      expect(wrapper.find('.MapContainer__loader').length).toEqual(1);
+      expect(wrapper.find('.MapContainer__loader')).toHaveLength(1);
 });
 
 // Does not display map
 it('Does not try to display a map if Leaflet API not loaded yet', () => {
       const wrapper = shallow(<MapContainer {...props} />);
       wrapper.setProps({ Leaflet: null, googleMap: {} });
-      expect(LeafletMock.map.mock.calls.length).toEqual(0);
+      expect(LeafletMock.map).toHaveBeenCalledTimes(0);
 });
 
 // Displays a map
@@ -101,27 +106,24 @@ it('Uses Leaflet to display a map when Leaflet is loaded', () => {
             Leaflet: LeafletMock,
       });
 
-      expect(LeafletMock.map.mock.calls.length).toEqual(1);
+      expect(LeafletMock.map).toHaveBeenCalledTimes(1);
 
       // display map
-      expect(mapObject.setView.mock.calls.length).toEqual(1);
-      expect(setViewMock.mock.calls[0][0]).toEqual(['latitude', 'longitude']);
-      expect(setViewMock.mock.calls[0][1]).toEqual('zoom');
+      expect(mapObject.setView).toHaveBeenCalledTimes(1);
+      expect(setViewMock).toHaveBeenCalledWith(['latitude', 'longitude'], 'zoom');
 
       // tile layer provider called
-      const tileLayerMockCalls = LeafletMock.tileLayer.mock.calls;
-      expect(tileLayerMockCalls.length).toEqual(1);
-      expect(tileLayerMockCalls[0][0]).toEqual('tileLayerApiEndPoint');
-      expect(tileLayerMockCalls[0][1].id).toEqual('tileLayerId');
-      expect(tileLayerMockCalls[0][1].maxZoom).toEqual('tileLayerMaxZoom');
-      expect(tileLayerMockCalls[0][1].attribution).toEqual('tileLayerAttribution');
-      expect(tileLayerMockCalls[0][1].accessToken).toEqual(
-            process.env.REACT_APP_MAPBOX_ACCESS_TOKEN,
-      );
+      expect(LeafletMock.tileLayer).toHaveBeenCalledTimes(1);
+      expect(LeafletMock.tileLayer).toHaveBeenCalledWith('tileLayerApiEndPoint', {
+            id: 'tileLayerId',
+            maxZoom: 'tileLayerMaxZoom',
+            attribution: 'tileLayerAttribution',
+            accessToken: process.env.REACT_APP_MAPBOX_ACCESS_TOKEN,
+      });
 
       // added to map
-      expect(tileLayerAddToMock.mock.calls.length).toEqual(1);
-      expect(tileLayerAddToMock.mock.calls[0][0]).toEqual(mapObject);
+      expect(tileLayerAddToMock).toHaveBeenCalledTimes(1);
+      expect(tileLayerAddToMock).toHaveBeenCalledWith(mapObject);
 });
 
 // Dispatches action to add waypoint
@@ -136,9 +138,8 @@ it('Displatches an action with lat and lng of new waypoint', () => {
             latlng: { lat: 'lat', lng: 'lng' },
       });
 
-      const { calls } = props.addWaypoint.mock;
-      expect(calls.length).toEqual(1);
-      expect(calls[0][0]).toEqual(['lat', 'lng']);
+      expect(props.addWaypoint).toHaveBeenCalledTimes(1);
+      expect(props.addWaypoint).toHaveBeenCalledWith(['lat', 'lng']);
 });
 
 describe('Update the markers on map click event', () => {
@@ -151,8 +152,8 @@ describe('Update the markers on map click event', () => {
             });
       });
 
-      // Add markers for each waypoint added
-      it('Adds a marker for each waypoint passed', () => {
+      // Add markers for each waypoint added and the polyline between them
+      it('Adds a marker for each waypoint passed and the polyline between them', () => {
             wrapper.setProps({
                   waypointList: [['lat1', 'lng1'], ['lat2', 'lng2']],
             });
@@ -164,8 +165,26 @@ describe('Update the markers on map click event', () => {
             expect(LeafletMock.layerGroup).toHaveBeenCalledTimes(1);
             expect(LeafletMock.layerGroup.mock.calls[0][0].length).toEqual(2);
 
+            // add a polyline
+            expect(LeafletMock.polyline).toHaveBeenCalledTimes(1);
+            expect(LeafletMock.polyline).toHaveBeenCalledWith(
+                  [['lat1', 'lng1'], ['lat2', 'lng2']],
+                  expect.any(Object),
+            );
+
+            // add the polylines to the layer group
+            expect(addLayerMock).toHaveBeenCalledTimes(1);
+
             // add the layer group to map
             expect(layerGroupAddToMock).toHaveBeenCalledTimes(1);
+      });
+
+      // No polylines if only one marker
+      it('Does not add polylines if only one waypoint entered', () => {
+            wrapper.setProps({
+                  waypointList: [['lat1', 'lng1']],
+            });
+            expect(LeafletMock.polyline).toHaveBeenCalledTimes(0);
       });
 
       // Clears previous markers before adding new ones
@@ -175,7 +194,7 @@ describe('Update the markers on map click event', () => {
                   waypointList: [['lat1', 'lng1']],
             });
 
-            expect(clearLayersMock.mock.calls.length).toEqual(0);
+            expect(clearLayersMock).toHaveBeenCalledTimes(0);
 
             // now we add new waypoints, but first the previous one should be cleared
             wrapper.setProps({
@@ -183,6 +202,6 @@ describe('Update the markers on map click event', () => {
             });
 
             // this time it was called
-            expect(clearLayersMock.mock.calls.length).toEqual(1);
+            expect(clearLayersMock).toHaveBeenCalledTimes(1);
       });
 });

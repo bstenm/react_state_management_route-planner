@@ -29,7 +29,7 @@ it('Displays a LeafletApiLoader component', () => {
 
 // Map
 it('Displays a Map component', () => {
-      expect(wrapper.find(LeafletApiLoader).find(Map).length).toEqual(1);
+      expect(wrapper.find(LeafletApiLoader).find(Map)).toHaveLength(1);
 });
 
 // Map prop: Leaflet
