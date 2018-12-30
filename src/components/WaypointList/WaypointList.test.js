@@ -10,6 +10,7 @@ describe('(Component) WaypointList', () => {
       beforeEach(() => {
             props = {
                   waypointList: [['lat1', 'lng1'], ['lat2', 'lng2'], ['lat3', 'lng3']],
+                  removeWaypoint: jest.fn(),
             };
             wrapper = shallow(<WaypointList {...props} />);
       });
@@ -31,5 +32,16 @@ describe('(Component) WaypointList', () => {
                         .at(1)
                         .props().id,
             ).toEqual(1);
+      });
+
+      // WaypointItem prop: remove
+      it('Passes a cb prop to remove a marker to WaypointItem component', () => {
+            wrapper
+                  .find(WaypointItem)
+                  .at(0)
+                  .props()
+                  .remove(12);
+            expect(props.removeWaypoint).toHaveBeenCalledTimes(1);
+            expect(props.removeWaypoint).toHaveBeenCalledWith(12);
       });
 });

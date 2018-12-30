@@ -9,6 +9,7 @@ let wrapper;
 beforeEach(() => {
       props = {
             waypointList: [['lat1', 'lng1'], ['lat2', 'lng2']],
+            removeWaypoint: jest.fn(),
       };
       wrapper = shallow(<WaypointListContainer {...props} />);
 });
@@ -24,4 +25,14 @@ it('Passes the waypoint list to WaypointList component as prop', () => {
             ['lat1', 'lng1'],
             ['lat2', 'lng2'],
       ]);
+});
+
+// WaypointList prop: removeWaypoint
+it('Passes a cb prop to remove a waypoint to WaypointList component', () => {
+      wrapper
+            .find(WaypointList)
+            .props()
+            .removeWaypoint(2);
+      expect(props.removeWaypoint).toHaveBeenCalledTimes(1);
+      expect(props.removeWaypoint).toHaveBeenCalledWith(2);
 });
