@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { addWaypoint } from '../../actions/waypoints';
 import cf from '../../config';
 import './MapContainer.css';
 
@@ -26,6 +28,13 @@ export class MapContainer extends React.Component {
                   ...rest,
                   accessToken: process.env.REACT_APP_MAPBOX_ACCESS_TOKEN,
             }).addTo(this.map);
+
+            this.map.on('click', e => {
+                  const { lat, lng } = e.latlng;
+                  const payload = [lat, lng];
+                  // dispatch action
+                  this.props.addWaypoint(payload);
+            });
       };
 
       render() {
@@ -49,6 +58,10 @@ MapContainer.defaultProps = {
 
 MapContainer.propTypes = {
       Leaflet: PropTypes.object,
+      addWaypoint: PropTypes.func.isRequired,
 };
 
-export default MapContainer;
+export default connect(
+      ({ waypointList }) => ({ waypointList }),
+      { addWaypoint },
+)(MapContainer);

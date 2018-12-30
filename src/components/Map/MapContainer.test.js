@@ -36,7 +36,15 @@ beforeEach(() => {
       setViewMock = jest.fn();
       tileLayerAddToMock = jest.fn();
 
+      let clickEventHandler = null;
+
       mapObject = {
+            fireClickEvent: e => {
+                  clickEventHandler(e);
+            },
+            on: (event, handler) => {
+                  clickEventHandler = handler;
+            },
             setView: setViewMock,
       };
 
@@ -49,6 +57,7 @@ beforeEach(() => {
 
       props = {
             Leaflet: null,
+            addWaypoint: jest.fn(),
       };
 });
 
@@ -56,6 +65,12 @@ beforeEach(() => {
 it('Displays a MapContainer', () => {
       const wrapper = shallow(<MapContainer {...props} />);
       expect(wrapper.find('.MapContainer').length).toEqual(1);
+});
+
+// Loader
+it('Displays a loader', () => {
+      const wrapper = shallow(<MapContainer {...props} />);
+      expect(wrapper.find('.MapContainer__loader').length).toEqual(1);
 });
 
 // Does not display map
@@ -93,4 +108,21 @@ it('Uses Leaflet to display a map when Leaflet is loaded', () => {
       // added to map
       expect(tileLayerAddToMock.mock.calls.length).toEqual(1);
       expect(tileLayerAddToMock.mock.calls[0][0]).toEqual(mapObject);
+});
+
+// Dispatches action to add waypoint
+it('Displatches an action with lat and lng of new waypoint', () => {
+      const wrapper = shallow(<MapContainer {...props} />);
+      wrapper.setProps({
+            Leaflet: LeafletMock,
+      });
+
+      // simulate click event on map
+      mapObject.fireClickEvent({
+            latlng: { lat: 'lat', lng: 'lng' },
+      });
+
+      const { calls } = props.addWaypoint.mock;
+      expect(calls.length).toEqual(1);
+      expect(calls[0][0]).toEqual(['lat', 'lng']);
 });

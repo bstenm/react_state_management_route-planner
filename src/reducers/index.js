@@ -1,3 +1,6 @@
 import { combineReducers } from 'redux';
+import waypointsReducer from './waypointList';
 
-export default combineReducers({});
+export default combineReducers({
+      waypointList: waypointsReducer,
+});
