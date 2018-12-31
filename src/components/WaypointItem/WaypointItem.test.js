@@ -27,10 +27,10 @@ describe('(Component) WaypointItem', () => {
             expect(icon.length).toEqual(1);
             // simulate click on delete icon
             icon.simulate('click');
-            expect(props.remove.mock.calls.length).toEqual(1);
-            expect(props.remove.mock.calls[0][0]).toEqual(9);
+            expect(props.remove).toHaveBeenCalledTimes(1);
+            expect(props.remove).toHaveBeenCalledWith(9);
             icon.simulate('keyDown');
-            expect(props.remove.mock.calls.length).toEqual(2);
+            expect(props.remove).toHaveBeenCalledTimes(2);
             expect(props.remove.mock.calls[1][0]).toEqual(9);
       });
 
@@ -40,7 +40,7 @@ describe('(Component) WaypointItem', () => {
                   .find('li')
                   .props()
                   .onDragStart('arg');
-            expect(props.onDragStart.mock.calls.length).toEqual(1);
-            expect(props.onDragStart.mock.calls[0][0]).toEqual('arg');
+            expect(props.onDragStart).toHaveBeenCalledTimes(1);
+            expect(props.onDragStart).toHaveBeenCalledWith('arg');
       });
 });

@@ -13,11 +13,17 @@ beforeEach(() => {
             target: { id: idx },
             dataTransfer: {
                   setData: jest.fn(),
-                  getData: jest.fn(() => 4),
+                  getData: jest.fn(() => 3),
             },
       });
       props = {
-            waypointList: [['lat1', 'lng1'], ['lat2', 'lng2']],
+            waypointList: [
+                  ['lat1', 'lng1'],
+                  ['lat2', 'lng2'],
+                  ['lat3', 'lng3'],
+                  ['lat4', 'lng4'],
+                  ['lat5', 'lng5'],
+            ],
             sortWaypoints: jest.fn(),
             removeWaypoint: jest.fn(),
       };
@@ -34,6 +40,9 @@ it('Passes the waypoint list to WaypointList component as prop', () => {
       expect(wrapper.find(WaypointList).props().waypointList).toEqual([
             ['lat1', 'lng1'],
             ['lat2', 'lng2'],
+            ['lat3', 'lng3'],
+            ['lat4', 'lng4'],
+            ['lat5', 'lng5'],
       ]);
 });
 
@@ -43,6 +52,7 @@ it('Passes a cb prop to remove a waypoint to WaypointList component', () => {
             .find(WaypointList)
             .props()
             .removeWaypoint(2);
+
       expect(props.removeWaypoint).toHaveBeenCalledTimes(1);
       expect(props.removeWaypoint).toHaveBeenCalledWith(2);
 });
@@ -51,10 +61,12 @@ it('Passes a cb prop to remove a waypoint to WaypointList component', () => {
 it('Passes a cb prop fot the drag start event to WaypointList component', () => {
       const eventMock = getEventMock(2);
       const { setData } = eventMock.dataTransfer;
+
       wrapper
             .find(WaypointList)
             .props()
             .onDragStart(eventMock);
+
       expect(setData).toHaveBeenCalledTimes(1);
       expect(setData).toHaveBeenCalledWith('text/plain', 2);
 });
@@ -67,38 +79,65 @@ it('Passes a cb prop for the drag over event to WaypointList component', () => {
             .find(WaypointList)
             .props()
             .onDragOver(eventMock);
+
       expect(preventDefault).toHaveBeenCalledTimes(1);
       expect(dataTransfer.dropEffect).toEqual('move');
 });
 
 // WaypointList prop: onDrop
 it('Dispatches a sort waypoint action on drop item event', () => {
-      const eventMock = getEventMock(2);
+      const eventMock = getEventMock(1);
       const { preventDefault, dataTransfer } = eventMock;
       wrapper
             .find(WaypointList)
             .props()
             .onDrop(eventMock);
+
       expect(preventDefault).toHaveBeenCalledTimes(1);
       expect(dataTransfer.getData).toHaveBeenCalledTimes(1);
       expect(dataTransfer.getData).toHaveBeenCalledWith('text/plain');
+
       expect(props.sortWaypoints).toHaveBeenCalledTimes(1);
       expect(props.sortWaypoints).toHaveBeenCalledWith({
-            draggedId: 4,
-            droppedOnId: 2,
+            draggedId: 3,
+            droppedOnId: 1,
+      });
+});
+
+// WaypointList prop: onDrop
+it('Dispatches a sort waypoint action with id of highest wayoint in list if user drops in the empty part of the waypoint panel', () => {
+      // simulating dropping inside the dropzone but not aon a waypoin item
+      const eventMock = getEventMock();
+      const { preventDefault, dataTransfer } = eventMock;
+      wrapper
+            .find(WaypointList)
+            .props()
+            .onDrop(eventMock);
+
+      expect(preventDefault).toHaveBeenCalledTimes(1);
+      expect(dataTransfer.getData).toHaveBeenCalledTimes(1);
+      expect(dataTransfer.getData).toHaveBeenCalledWith('text/plain');
+
+      expect(props.sortWaypoints).toHaveBeenCalledTimes(1);
+      expect(props.sortWaypoints).toHaveBeenCalledWith({
+            draggedId: 3,
+            droppedOnId: 4,
       });
 });
 
 // WaypointList prop: onDrop
 it('Does not dispatch a sort waypoint action on drop item event if the item dragged id is equal to the item dropped on id', () => {
-      const eventMock = getEventMock(4);
+      const eventMock = getEventMock(3);
       const { preventDefault, dataTransfer } = eventMock;
       wrapper
             .find(WaypointList)
             .props()
             .onDrop(eventMock);
+
       expect(preventDefault).toHaveBeenCalledTimes(1);
+
       expect(dataTransfer.getData).toHaveBeenCalledTimes(1);
       expect(dataTransfer.getData).toHaveBeenCalledWith('text/plain');
+
       expect(props.sortWaypoints).not.toHaveBeenCalled();
 });

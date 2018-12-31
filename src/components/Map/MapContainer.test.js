@@ -31,6 +31,7 @@ let mapObject;
 let setViewMock;
 let addLayerMock;
 let clearLayersMock;
+let toGeoJSONMock;
 let polylineAddToMock;
 let tileLayerAddToMock;
 let layerGroupAddToMock;
@@ -44,6 +45,7 @@ beforeEach(() => {
       tileLayerAddToMock = jest.fn();
       tileLayerAddToMock = jest.fn();
       layerGroupAddToMock = jest.fn();
+      toGeoJSONMock = jest.fn(() => ({ geoJSON: 'data' }));
 
       let clickEventHandler = null;
 
@@ -64,6 +66,7 @@ beforeEach(() => {
                   addTo: layerGroupAddToMock,
                   addLayer: addLayerMock,
                   clearLayers: clearLayersMock,
+                  toGeoJSON: toGeoJSONMock,
             })),
             tileLayer: jest.fn(() => ({
                   addTo: tileLayerAddToMock,
@@ -79,6 +82,7 @@ beforeEach(() => {
             googleMap: null,
             waypointList: [],
             addWaypoint: jest.fn(),
+            updateGeoJsonData: jest.fn(),
       };
 });
 
@@ -98,14 +102,14 @@ it('Displays a loader', () => {
 it('Does not try to display a map if Leaflet API not loaded yet', () => {
       const wrapper = shallow(<MapContainer {...props} />);
       wrapper.setProps({ Leaflet: null, googleMap: {} });
-      expect(LeafletMock.map.mock.calls.length).toEqual(0);
+      expect(LeafletMock.map).toHaveBeenCalledTimes(0);
 });
 
 // Does not display map
 it('Does not try to display a map if the Google Map API not loaded yet', () => {
       const wrapper = shallow(<MapContainer {...props} />);
       wrapper.setProps({ Leaflet: LeafletMock });
-      expect(LeafletMock.map.mock.calls.length).toEqual(0);
+      expect(LeafletMock.map).toHaveBeenCalledTimes(0);
 });
 
 // Displays a map
@@ -233,6 +237,13 @@ describe('Update the markers on map click event', () => {
 
             // add the layer group to map
             expect(layerGroupAddToMock).toHaveBeenCalledTimes(1);
+
+            // update the geo json data held in react context
+            expect(toGeoJSONMock).toHaveBeenCalledTimes(1);
+            expect(props.updateGeoJsonData).toHaveBeenCalledTimes(1);
+            expect(props.updateGeoJsonData).toHaveBeenCalledWith({
+                  geoJSON: 'data',
+            });
       });
 
       // No polylines if only one marker

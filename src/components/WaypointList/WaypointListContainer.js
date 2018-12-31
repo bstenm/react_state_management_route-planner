@@ -16,13 +16,17 @@ export class WaypointListContainer extends React.Component {
 
       onDrop = e => {
             e.preventDefault();
+
             const draggedId = e.dataTransfer.getData('text/plain');
+
             // the id of the item on which we drop the dragged item.
             // if dropping outside the list we simulate dropping on last item
             const droppedOnId =
                   e.target.id || this.props.waypointList.length - 1;
+
             // do nothing if we drop item into itself
             if (draggedId === droppedOnId) return;
+
             // dispatch action
             this.props.sortWaypoints({ draggedId, droppedOnId });
       };

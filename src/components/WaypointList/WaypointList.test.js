@@ -31,8 +31,8 @@ it('Passes a cb prop fot the drop event to Waypoint component', () => {
             .find('.WaypointList')
             .props()
             .onDrop('arg');
-      expect(props.onDrop.mock.calls.length).toEqual(1);
-      expect(props.onDrop.mock.calls[0][0]).toEqual('arg');
+      expect(props.onDrop).toHaveBeenCalledTimes(1);
+      expect(props.onDrop).toHaveBeenCalledWith('arg');
 });
 
 // WaypointList prop: onDragOver
@@ -41,8 +41,8 @@ it('Passes a cb prop for the drag over event to Waypoint component', () => {
             .find('.WaypointList')
             .props()
             .onDragOver('arg');
-      expect(props.onDragOver.mock.calls.length).toEqual(1);
-      expect(props.onDragOver.mock.calls[0][0]).toEqual('arg');
+      expect(props.onDragOver).toHaveBeenCalledTimes(1);
+      expect(props.onDragOver).toHaveBeenCalledWith('arg');
 });
 
 // WaypointItem prop: onDragStart

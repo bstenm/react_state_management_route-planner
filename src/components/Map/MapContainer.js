@@ -73,7 +73,7 @@ export class MapContainer extends React.Component {
       updateMapMarkers = () => {
             const latlngs = [];
             const markers = [];
-            const { Leaflet, waypointList } = this.props;
+            const { Leaflet, waypointList, updateGeoJsonData } = this.props;
 
             // clear all markers before re-adding the waypoints
             // we get from the redux store (no performance
@@ -111,6 +111,9 @@ export class MapContainer extends React.Component {
             }
 
             this.markerGroup.addTo(this.map);
+
+            // from react context
+            updateGeoJsonData(this.markerGroup.toGeoJSON());
       };
 
       render() {
@@ -139,6 +142,7 @@ MapContainer.propTypes = {
       googleMap: PropTypes.object,
       waypointList: PropTypes.array,
       addWaypoint: PropTypes.func.isRequired,
+      updateGeoJsonData: PropTypes.func.isRequired,
 };
 
 export default connect(
