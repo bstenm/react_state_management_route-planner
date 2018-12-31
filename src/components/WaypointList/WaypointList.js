@@ -9,6 +9,7 @@ const WaypointList = ({
       onDrop,
       onDragOver,
       onDragStart,
+      draggedOnId,
 }) => (
       <div onDrop={onDrop} onDragOver={onDragOver} className="WaypointList">
             {waypointList.length ? (
@@ -19,6 +20,7 @@ const WaypointList = ({
                                     key={lat}
                                     remove={removeWaypoint}
                                     onDragStart={onDragStart}
+                                    draggedOn={draggedOnId === idx}
                               />
                         ))}
                   </ul>
@@ -32,11 +34,13 @@ const WaypointList = ({
 
 WaypointList.defaultProps = {
       waypointList: [],
+      draggedOnId: null,
 };
 
 WaypointList.propTypes = {
       onDrop: PropTypes.func.isRequired,
       onDragOver: PropTypes.func.isRequired,
+      draggedOnId: PropTypes.number,
       onDragStart: PropTypes.func.isRequired,
       waypointList: PropTypes.array,
       removeWaypoint: PropTypes.func.isRequired,

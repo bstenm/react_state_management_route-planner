@@ -5,6 +5,8 @@ import WaypointList from './WaypointList';
 import { removeWaypoint, sortWaypoints } from '../../actions/waypoints';
 
 export class WaypointListContainer extends React.Component {
+      state = { draggedOnId: null };
+
       onDragStart = e => {
             e.dataTransfer.setData('text/plain', e.target.id);
       };
@@ -12,10 +14,21 @@ export class WaypointListContainer extends React.Component {
       onDragOver = e => {
             e.preventDefault();
             e.dataTransfer.dropEffect = 'move';
+
+            // the id for the item being dragged on is set to last item if
+            // dragging inside dropzone but outside the waypoint list
+            let { id } = e.target;
+            id = id || id === '0' ? id : this.props.waypointList.length - 1;
+
+            if (this.state.draggedOnId !== id) {
+                  this.setState({ draggedOnId: parseInt(id, 10) });
+            }
       };
 
       onDrop = e => {
             e.preventDefault();
+
+            this.setState({ draggedOnId: null });
 
             const draggedId = e.dataTransfer.getData('text/plain');
 
@@ -36,6 +49,7 @@ export class WaypointListContainer extends React.Component {
                   <WaypointList
                         waypointList={this.props.waypointList}
                         removeWaypoint={this.props.removeWaypoint}
+                        draggedOnId={this.state.draggedOnId}
                         onDragOver={this.onDragOver}
                         onDragStart={this.onDragStart}
                         onDrop={this.onDrop}

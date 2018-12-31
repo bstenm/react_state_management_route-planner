@@ -1,13 +1,14 @@
 import './WaypointItem.css';
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 
-const WaypointItem = ({ id, remove, onDragStart }) => (
+const WaypointItem = ({ id, remove, onDragStart, draggedOn }) => (
       <li
             id={id}
             draggable="true"
             onDragStart={onDragStart}
-            className="WaypointItem"
+            className={classNames('WaypointItem', { draggedOn })}
       >
             <i className="fas fa-arrows-alt" title="move" />
             Waypoint {id + 1}
@@ -28,6 +29,7 @@ const WaypointItem = ({ id, remove, onDragStart }) => (
 WaypointItem.propTypes = {
       id: PropTypes.number.isRequired,
       remove: PropTypes.func.isRequired,
+      draggedOn: PropTypes.bool.isRequired,
       onDragStart: PropTypes.func.isRequired,
 };
 

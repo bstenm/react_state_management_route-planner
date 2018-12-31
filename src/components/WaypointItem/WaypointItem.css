@@ -2,11 +2,19 @@
       background: inherit;
       border: 0;
       font-size: 17px;
-      padding-top: 14px;
+      padding: 7px 15px;
+}
+
+.WaypointItem.draggedOn {
+      border-left: 2px solid white;
+      border-right: 2px solid white;
+      padding: 7px 13px;
+      background: #555;
 }
 
 .WaypointItem i {
       font-size: 14px;
       color: #CCC;
       margin-right: 19px;
+      cursor: pointer;
 }

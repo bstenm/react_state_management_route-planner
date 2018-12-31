@@ -5,6 +5,7 @@
   "description": "Route planner for cross-country running",
   "license": "MIT",
   "dependencies": {
+    "classnames": "2.2.6",
     "enzyme": "3.7.0",
     "enzyme-adapter-react-16": "1.7.0",
     "loadjs": "3.5.5",

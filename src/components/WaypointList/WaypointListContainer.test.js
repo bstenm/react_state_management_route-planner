@@ -71,19 +71,6 @@ it('Passes a cb prop fot the drag start event to WaypointList component', () => 
       expect(setData).toHaveBeenCalledWith('text/plain', 2);
 });
 
-// WaypointList prop: onDragOver
-it('Passes a cb prop for the drag over event to WaypointList component', () => {
-      const eventMock = getEventMock(2);
-      const { dataTransfer, preventDefault } = eventMock;
-      wrapper
-            .find(WaypointList)
-            .props()
-            .onDragOver(eventMock);
-
-      expect(preventDefault).toHaveBeenCalledTimes(1);
-      expect(dataTransfer.dropEffect).toEqual('move');
-});
-
 // WaypointList prop: onDrop
 it('Dispatches a sort waypoint action on drop item event', () => {
       const eventMock = getEventMock(1);
@@ -140,4 +127,46 @@ it('Does not dispatch a sort waypoint action on drop item event if the item drag
       expect(dataTransfer.getData).toHaveBeenCalledWith('text/plain');
 
       expect(props.sortWaypoints).not.toHaveBeenCalled();
+});
+
+// WaypointList prop: onDragOver
+describe('WaypointList onDragOver prop', () => {
+      let eventMock;
+
+      beforeEach(() => {
+            eventMock = getEventMock('2');
+            wrapper
+                  .find(WaypointList)
+                  .props()
+                  .onDragOver(eventMock);
+      });
+
+      it('Sets tje drop effectt', () => {
+            const { dataTransfer, preventDefault } = eventMock;
+
+            expect(preventDefault).toHaveBeenCalledTimes(1);
+            expect(dataTransfer.dropEffect).toEqual('move');
+      });
+
+      it('Sets the id of the item being dragged on', () => {
+            expect(wrapper.find(WaypointList).props().draggedOnId).toEqual(2);
+
+            // simulate drag over on other item
+            wrapper
+                  .find(WaypointList)
+                  .props()
+                  .onDragOver(getEventMock('0'));
+
+            expect(wrapper.find(WaypointList).props().draggedOnId).toEqual(0);
+      });
+
+      it('Sets the id of the item being dragged on to last waypoint if dragging over dropzone but outside waypoint list', () => {
+            // simulate drag over on dropzone but outside waypoint list
+            wrapper
+                  .find(WaypointList)
+                  .props()
+                  .onDragOver(getEventMock());
+
+            expect(wrapper.find(WaypointList).props().draggedOnId).toEqual(4);
+      });
 });

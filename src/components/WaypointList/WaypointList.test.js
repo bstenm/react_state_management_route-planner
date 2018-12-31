@@ -81,3 +81,23 @@ it('Passes index of waypoint in list as id to WaypointItem component', () => {
                   .props().id,
       ).toEqual(1);
 });
+
+// WaypointItem prop: draggedOn
+it('Passes boolean that sets wheteher that itemm is beign dragged on or not to WaypointItem component', () => {
+      expect(
+            wrapper
+                  .find(WaypointItem)
+                  .at(2)
+                  .props().draggedOn,
+      ).toEqual(false);
+
+      // item at index 2 is now being dragged on
+      wrapper.setProps({ draggedOnId: 2 });
+
+      expect(
+            wrapper
+                  .find(WaypointItem)
+                  .at(2)
+                  .props().draggedOn,
+      ).toEqual(true);
+});
