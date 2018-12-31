@@ -76,6 +76,8 @@ beforeEach(() => {
 
       props = {
             Leaflet: null,
+            googleMap: null,
+            waypointList: [],
             addWaypoint: jest.fn(),
       };
 });
@@ -96,14 +98,22 @@ it('Displays a loader', () => {
 it('Does not try to display a map if Leaflet API not loaded yet', () => {
       const wrapper = shallow(<MapContainer {...props} />);
       wrapper.setProps({ Leaflet: null, googleMap: {} });
-      expect(LeafletMock.map).toHaveBeenCalledTimes(0);
+      expect(LeafletMock.map.mock.calls.length).toEqual(0);
+});
+
+// Does not display map
+it('Does not try to display a map if the Google Map API not loaded yet', () => {
+      const wrapper = shallow(<MapContainer {...props} />);
+      wrapper.setProps({ Leaflet: LeafletMock });
+      expect(LeafletMock.map.mock.calls.length).toEqual(0);
 });
 
 // Displays a map
-it('Uses Leaflet to display a map when Leaflet is loaded', () => {
+it('Uses Leaflet to display a map when Leaflet and Google Map Api are loaded', () => {
       const wrapper = shallow(<MapContainer {...props} />);
       wrapper.setProps({
             Leaflet: LeafletMock,
+            googleMap: { some: 'api' },
       });
 
       expect(LeafletMock.map).toHaveBeenCalledTimes(1);
@@ -133,10 +143,18 @@ it('Uses Leaflet to display a map when Leaflet is loaded', () => {
 });
 
 // Dispatches action to add waypoint
-it('Displatches an action with lat and lng of new waypoint', () => {
+it('Dispatches an action with lat and lng and elevation of the new waypoint', () => {
       const wrapper = shallow(<MapContainer {...props} />);
       wrapper.setProps({
             Leaflet: LeafletMock,
+            // mock the google map elevation api
+            googleMap: {
+                  ElevationService: class ElevationServiceMock {
+                        getElevationForLocations = jest.fn((_, cb) => {
+                              cb([{ elevation: 'elevation' }], 'OK');
+                        });
+                  },
+            },
       });
 
       // simulate click event on map
@@ -144,10 +162,37 @@ it('Displatches an action with lat and lng of new waypoint', () => {
             latlng: { lat: 'lat', lng: 'lng' },
       });
 
-      expect(props.addWaypoint).toHaveBeenCalledTimes(1);
-      expect(props.addWaypoint).toHaveBeenCalledWith(['lat', 'lng']);
+      const { calls } = props.addWaypoint.mock;
+      expect(calls.length).toEqual(1);
+      expect(calls[0][0]).toEqual(['lat', 'lng', 'elevation']);
 });
 
+// Dispatches action to add waypoint
+it('Displatches an action with only lat and lng if no elevation returned by google api', () => {
+      const wrapper = shallow(<MapContainer {...props} />);
+      wrapper.setProps({
+            Leaflet: LeafletMock,
+            // mock the google map elevation api
+            googleMap: {
+                  ElevationService: class ElevationServiceMock {
+                        getElevationForLocations = jest.fn((_, cb) => {
+                              cb(null, 'NOT OK');
+                        });
+                  },
+            },
+      });
+
+      // simulate click event on map
+      mapObject.fireClickEvent({
+            latlng: { lat: 'lat', lng: 'lng' },
+      });
+
+      const { calls } = props.addWaypoint.mock;
+      expect(calls.length).toEqual(1);
+      expect(calls[0][0]).toEqual(['lat', 'lng']);
+});
+
+// Markers
 describe('Update the markers on map click event', () => {
       let wrapper;
 
@@ -155,6 +200,11 @@ describe('Update the markers on map click event', () => {
             wrapper = shallow(<MapContainer {...props} />);
             wrapper.setProps({
                   Leaflet: LeafletMock,
+                  googleMap: {
+                        ElevationService: class ElevationServiceMock {
+                              getElevationForLocations = () => null;
+                        },
+                  },
             });
       });
 

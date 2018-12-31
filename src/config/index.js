@@ -19,9 +19,15 @@ const tileLayer = {
             'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
 };
 
+const googleMapApi = {
+      url: 'https://maps.googleapis.com/maps/api/js',
+      version: 3.36,
+};
+
 export default {
       mapLib,
       tileLayer,
+      googleMapApi,
       zoom: 11,
       latitude: 47.6,
       longitude: 10.8,

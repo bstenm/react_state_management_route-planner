@@ -5,7 +5,7 @@ import cf from '../../config';
 import { LeafletApiLoaderContainer } from './LeafletApiLoaderContainer';
 
 jest.mock('loadjs', () =>
-      jest.fn((endPoints, options) => {
+      jest.fn((_, options) => {
             options.success();
       }),
 );

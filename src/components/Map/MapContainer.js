@@ -1,15 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { addWaypoint } from '../../actions/waypoints';
 import cf from '../../config';
+import { addWaypoint } from '../../actions/waypoints';
+import GoogleMapApiLoader from '../../hoc/GoogleMapApiLoader';
 import './MapContainer.css';
 
 export class MapContainer extends React.Component {
       componentDidUpdate(prevProps) {
-            const { Leaflet } = this.props;
-            // initialse the map once the Leaflet lib has been loaded
-            if (prevProps.Leaflet !== Leaflet) {
+            const { Leaflet, googleMap } = this.props;
+            // initialse the map once the Leaflet and Google map libs have been loaded
+            if (
+                  Leaflet &&
+                  googleMap &&
+                  (prevProps.Leaflet !== Leaflet ||
+                        prevProps.googleMap !== googleMap)
+            ) {
                   this.initialiseMap();
                   return;
             }
@@ -36,12 +42,32 @@ export class MapContainer extends React.Component {
                   accessToken: process.env.REACT_APP_MAPBOX_ACCESS_TOKEN,
             }).addTo(this.map);
 
-            this.map.on('click', e => {
-                  const { lat, lng } = e.latlng;
-                  const payload = [lat, lng];
-                  // dispatch action
-                  this.props.addWaypoint(payload);
-            });
+            this.map.on('click', this.onMapClick);
+      };
+
+      onMapClick = e => {
+            const { lat, lng } = e.latlng;
+            const { googleMap } = this.props;
+
+            // get elevation data for this waypoint
+            new googleMap.ElevationService().getElevationForLocations(
+                  {
+                        locations: [e.latlng],
+                  },
+                  (results, status) => {
+                        let el;
+                        let payload = [lat, lng];
+
+                        // fail silently
+                        if (status === 'OK' && results[0]) {
+                              el = results[0].elevation;
+                              payload = [lat, lng, el];
+                        }
+
+                        // dispatch action
+                        this.props.addWaypoint(payload);
+                  },
+            );
       };
 
       updateMapMarkers = () => {
@@ -104,11 +130,13 @@ export class MapContainer extends React.Component {
 
 MapContainer.defaultProps = {
       Leaflet: null,
+      googleMap: null,
       waypointList: [],
 };
 
 MapContainer.propTypes = {
       Leaflet: PropTypes.object,
+      googleMap: PropTypes.object,
       waypointList: PropTypes.array,
       addWaypoint: PropTypes.func.isRequired,
 };
@@ -116,4 +144,4 @@ MapContainer.propTypes = {
 export default connect(
       ({ waypointList }) => ({ waypointList }),
       { addWaypoint },
-)(MapContainer);
+)(GoogleMapApiLoader(MapContainer));
