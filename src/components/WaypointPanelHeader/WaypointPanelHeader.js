@@ -13,6 +13,7 @@ const WaypointPanelHeader = ({ geoJsonData }) => (
                               togpx(geoJsonData),
                         )}`}
                         download="route.xml"
+                        title="download gpx"
                   >
                         <i className="fa fa-download download-btn" />
                   </a>

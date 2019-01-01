@@ -26,7 +26,7 @@ const WaypointList = ({
                   </ul>
             ) : (
                   <div className="guidelines">
-                        Click on the map to add waypoint to your itinerary
+                        Click on the map to add waypoints to your itinerary
                   </div>
             )}
       </div>
