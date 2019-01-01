@@ -3,6 +3,7 @@ import {
       ADD_WAYPOINT,
       REMOVE_WAYPOINT,
       SORT_WAYPOINTS,
+      UPDATE_WAYPOINT,
 } from '../config/action-types';
 
 it('Returns the state unchanged if unknown action passed', () => {
@@ -33,7 +34,9 @@ it('Removes a waypoint from the array', () => {
             [-396.9, 176.8],
             [-9.9, 16.0],
       ];
+
       const actions = { type: REMOVE_WAYPOINT, payload: 2 };
+
       expect(reducer(state, actions)).toEqual([
             [-50.4, 29.5],
             [-51.9, 31.8],
@@ -42,6 +45,7 @@ it('Removes a waypoint from the array', () => {
             [-9.9, 16.0],
       ]);
 });
+
 it('Sorts the waypointlist according to where the dragged item was dropped', () => {
       const state = [
             [-10.4, 19.5],
@@ -50,6 +54,7 @@ it('Sorts the waypointlist according to where the dragged item was dropped', () 
             [-40.4, 49.5],
             [-50.4, 59.5],
       ];
+
       const action1 = {
             type: SORT_WAYPOINTS,
             payload: {
@@ -57,6 +62,7 @@ it('Sorts the waypointlist according to where the dragged item was dropped', () 
                   droppedOnId: 4,
             },
       };
+
       expect(reducer(state, action1)).toEqual([
             [-10.4, 19.5],
             [-20.4, 29.5],
@@ -64,6 +70,7 @@ it('Sorts the waypointlist according to where the dragged item was dropped', () 
             [-50.4, 59.5],
             [-30.4, 39.5],
       ]);
+
       const action2 = {
             type: SORT_WAYPOINTS,
             payload: {
@@ -71,11 +78,37 @@ it('Sorts the waypointlist according to where the dragged item was dropped', () 
                   droppedOnId: 4,
             },
       };
+
       expect(reducer(state, action2)).toEqual([
             [-20.4, 29.5],
             [-30.4, 39.5],
             [-40.4, 49.5],
             [-50.4, 59.5],
             [-10.4, 19.5],
+      ]);
+});
+
+it('Updates the data of a waypoint in the array', () => {
+      const state = [
+            [-50.4, 29.5],
+            [-51.9, 31.8],
+            [-20.9, 20.8],
+            [-30.9, 30.8],
+            [-396.9, 176.8],
+            [-9.9, 16.0],
+      ];
+
+      const actions = {
+            type: UPDATE_WAYPOINT,
+            payload: { idx: 2, data: [-29.9, 29.8, 1290.9] },
+      };
+
+      expect(reducer(state, actions)).toEqual([
+            [-50.4, 29.5],
+            [-51.9, 31.8],
+            [-29.9, 29.8, 1290.9],
+            [-30.9, 30.8],
+            [-396.9, 176.8],
+            [-9.9, 16.0],
       ]);
 });

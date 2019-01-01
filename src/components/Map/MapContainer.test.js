@@ -29,6 +29,7 @@ jest.mock('../../config', () => ({
 let props;
 let mapObject;
 let setViewMock;
+let markerObject;
 let addLayerMock;
 let clearLayersMock;
 let toGeoJSONMock;
@@ -47,16 +48,26 @@ beforeEach(() => {
       layerGroupAddToMock = jest.fn();
       toGeoJSONMock = jest.fn(() => ({ geoJSON: 'data' }));
 
-      let clickEventHandler = null;
+      let clickMapEventHandler = null;
+      let dragEndEventHandler = null;
 
       mapObject = {
             fireClickEvent: e => {
-                  clickEventHandler(e);
+                  clickMapEventHandler(e);
             },
-            on: (event, handler) => {
-                  clickEventHandler = handler;
+            on: (_, handler) => {
+                  clickMapEventHandler = handler;
             },
             setView: setViewMock,
+      };
+
+      markerObject = {
+            fireDragEndEvent: e => {
+                  dragEndEventHandler(e);
+            },
+            on: (_, handler) => {
+                  dragEndEventHandler = handler;
+            },
       };
 
       LeafletMock = {
@@ -71,7 +82,7 @@ beforeEach(() => {
             tileLayer: jest.fn(() => ({
                   addTo: tileLayerAddToMock,
             })),
-            marker: jest.fn(),
+            marker: jest.fn(() => markerObject),
             polyline: jest.fn(() => ({
                   addTo: polylineAddToMock,
             })),
@@ -82,6 +93,7 @@ beforeEach(() => {
             googleMap: null,
             waypointList: [],
             addWaypoint: jest.fn(),
+            updateWaypoint: jest.fn(),
             updateGeoJsonData: jest.fn(),
       };
 });
@@ -166,9 +178,12 @@ it('Dispatches an action with lat and lng and elevation of the new waypoint', ()
             latlng: { lat: 'lat', lng: 'lng' },
       });
 
-      const { calls } = props.addWaypoint.mock;
-      expect(calls.length).toEqual(1);
-      expect(calls[0][0]).toEqual(['lat', 'lng', 'elevation']);
+      expect(props.addWaypoint).toHaveBeenCalledTimes(1);
+      expect(props.addWaypoint).toHaveBeenCalledWith([
+            'lat',
+            'lng',
+            'elevation',
+      ]);
 });
 
 // Dispatches action to add waypoint
@@ -206,7 +221,9 @@ describe('Update the markers on map click event', () => {
                   Leaflet: LeafletMock,
                   googleMap: {
                         ElevationService: class ElevationServiceMock {
-                              getElevationForLocations = () => null;
+                              getElevationForLocations = (_, cb) => {
+                                    cb([{ elevation: 'newElevation' }], 'OK');
+                              };
                         },
                   },
             });
@@ -270,5 +287,23 @@ describe('Update the markers on map click event', () => {
 
             // this time it was called
             expect(clearLayersMock).toHaveBeenCalledTimes(1);
+      });
+
+      it('Updates the marker data on drag and drop', () => {
+            wrapper.setProps({
+                  waypointList: [['lat1', 'lng1']],
+            });
+
+            expect(LeafletMock.marker).toHaveBeenCalledTimes(1);
+
+            markerObject.fireDragEndEvent({
+                  target: { _latlng: { lat: 'newLat', lng: 'newLng' } },
+            });
+
+            expect(props.updateWaypoint).toHaveBeenCalledTimes(1);
+            expect(props.updateWaypoint).toHaveBeenCalledWith({
+                  data: ['newLat', 'newLng', 'newElevation'],
+                  idx: 0,
+            });
       });
 });

@@ -3,6 +3,7 @@ import {
       ADD_WAYPOINT,
       REMOVE_WAYPOINT,
       SORT_WAYPOINTS,
+      UPDATE_WAYPOINT,
 } from '../config/action-types';
 
 export const addWaypoint = payload => ({
@@ -17,5 +18,10 @@ export const removeWaypoint = payload => ({
 
 export const sortWaypoints = payload => ({
       type: SORT_WAYPOINTS,
+      payload,
+});
+
+export const updateWaypoint = payload => ({
+      type: UPDATE_WAYPOINT,
       payload,
 });

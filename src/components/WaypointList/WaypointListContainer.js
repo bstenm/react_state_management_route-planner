@@ -19,9 +19,10 @@ export class WaypointListContainer extends React.Component {
             // dragging inside dropzone but outside the waypoint list
             let { id } = e.target;
             id = id || id === '0' ? id : this.props.waypointList.length - 1;
+            id = parseInt(id, 10);
 
             if (this.state.draggedOnId !== id) {
-                  this.setState({ draggedOnId: parseInt(id, 10) });
+                  this.setState({ draggedOnId: id });
             }
       };
 

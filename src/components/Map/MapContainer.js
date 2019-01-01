@@ -2,13 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import cf from '../../config';
-import { addWaypoint } from '../../actions/waypoints';
 import GoogleMapApiLoader from '../../hoc/GoogleMapApiLoader';
+import { addWaypoint, updateWaypoint } from '../../actions/waypoints';
 import './MapContainer.css';
 
 export class MapContainer extends React.Component {
       componentDidUpdate(prevProps) {
-            const { Leaflet, googleMap } = this.props;
+            const { Leaflet, googleMap, waypointList } = this.props;
             // initialse the map once the Leaflet and Google map libs have been loaded
             if (
                   Leaflet &&
@@ -20,9 +20,11 @@ export class MapContainer extends React.Component {
                   return;
             }
 
-            // [OPTIMIZATION]: we could update markers only if the list from the redux store has changed
-            // (we can not remove and add a new marker at the same time so comparing the length is good enough)
-            if (this.map) {
+            // update markers only if waypoint list has been updated
+            if (
+                  JSON.stringify(waypointList) !==
+                  JSON.stringify(prevProps.waypointList)
+            ) {
                   this.updateMapMarkers();
             }
       }
@@ -42,17 +44,20 @@ export class MapContainer extends React.Component {
                   accessToken: process.env.REACT_APP_MAPBOX_ACCESS_TOKEN,
             }).addTo(this.map);
 
-            this.map.on('click', this.onMapClick);
+            this.map.on('click', e => {
+                  // add waypoint with lat, lng, elevation
+                  this.getElevationData(e.latlng, this.props.addWaypoint);
+            });
       };
 
-      onMapClick = e => {
-            const { lat, lng } = e.latlng;
+      getElevationData = (latlng, cb) => {
+            const { lat, lng } = latlng;
             const { googleMap } = this.props;
 
             // get elevation data for this waypoint
             new googleMap.ElevationService().getElevationForLocations(
                   {
-                        locations: [e.latlng],
+                        locations: [latlng],
                   },
                   (results, status) => {
                         let el;
@@ -64,8 +69,7 @@ export class MapContainer extends React.Component {
                               payload = [lat, lng, el];
                         }
 
-                        // dispatch action
-                        this.props.addWaypoint(payload);
+                        cb(payload);
                   },
             );
       };
@@ -91,7 +95,19 @@ export class MapContainer extends React.Component {
                   });
 
                   // create a new Leaflet marker
-                  const marker = Leaflet.marker(coords, { icon: blackDot });
+                  const marker = Leaflet.marker(coords, {
+                        icon: blackDot,
+                        draggable: true,
+                  });
+
+                  // update waypoint data on marker drag and drop
+                  marker.on('dragend', e => {
+                        // eslint-disable-next-line no-underscore-dangle
+                        const { lat, lng } = e.target._latlng;
+                        this.getElevationData({ lat, lng }, data => {
+                              this.props.updateWaypoint({ idx, data });
+                        });
+                  });
 
                   // push into array to enable creation of a layer group
                   markers.push(marker);
@@ -142,10 +158,11 @@ MapContainer.propTypes = {
       googleMap: PropTypes.object,
       waypointList: PropTypes.array,
       addWaypoint: PropTypes.func.isRequired,
+      updateWaypoint: PropTypes.func.isRequired,
       updateGeoJsonData: PropTypes.func.isRequired,
 };
 
 export default connect(
       ({ waypointList }) => ({ waypointList }),
-      { addWaypoint },
+      { addWaypoint, updateWaypoint },
 )(GoogleMapApiLoader(MapContainer));
