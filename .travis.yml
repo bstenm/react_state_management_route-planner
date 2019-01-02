@@ -19,3 +19,13 @@ install:
 script:
       - yarn test --coverage --coverageReporters=text-lcov --detectOpenHandles --forceExit | coveralls
       - yarn build
+
+deploy:
+      provider: s3
+      access_key_id: "AKIAJCJNSV4XCNS3UQAQ"
+      bucket: "my-route-planner"
+      local_dir: build
+      on:
+            branch: master
+      secret_access_key:
+            secure: inPKCCVSv+1YD/PM25brD0JcvsoygnLlUnwBwQSgzfYzfgfEPnX8p9D/xRggvi58+Q7J/gcZIaaNoHHn6d/hPXOqI/sbM0cddFCwORRK2/AxZKxUhPBZSc5E4pgjCc5nZX/6LktNTOZ9pTUpNgiL3dpgPAW+scsER5scRn/vyZdq4sm3BdcsMFCfKjayYyYOrs4Ji5I5XL1W4BLyiZyNtmmdkRRIm+b6bPCAYqC+rFftYiXXrTWq//2taDGVdTfPzPcH/+C/9oHaGfbuAJQDEm1VqtRlu04Z81lcp3BahbIlwLfwyXOQy53QNsXyqqcWNXC/uSKdm8ogRaj4Va6L4+B5TXQbSDyp40+vb0fvt76ctIy2pyuf0vEJZnL9fxxyIollMRIEV0PoLeV9Hkmp7Nq4/e0XyxdIgCLQglMYdSWJjYzL7SQNQl+R4cqYnWGK0yeQb0YN8s/PRyZB+OXxcBDy2THQGgk/sKMaEI3Am/2aNycISH4sdU3kqXfisfZVCn92lQLQWofy9YtNHmgJPfvMBTSeetf8WoW9UTZEPMETJYuuaDSGFLMcebAUON0Ei1fki2CnX8SFMg/Y2ORXTb8nVrbPc+4h5Ysb7YUQsP+Tt84Nt1TfYafLayRrfGqmMPe/0yFpvHSr/UjFtai4hyFktm/ZraSTnelmQS2qz0Q=

@@ -1,7 +1,7 @@
 
 A cross-country route planner without 3rd party libraries.
 
-[![Build Status](https://travis-ci.org/bstenm/route-planner-draft.svg?branch=master)](https://travis-ci.org/bstenm/route-planner-draft) [![Coverage Status](https://coveralls.io/repos/github/bstenm/route-planner-draft/badge.svg?branch=master)](https://coveralls.io/github/bstenm/route-planner-draft?branch=master) [![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=bstenm/route-planner-draft)](https://dependabot.com)
+[![Build Status](https://travis-ci.org/bstenm/route-planner.svg?branch=master)](https://travis-ci.org/bstenm/route-planner) [![Coverage Status](https://coveralls.io/repos/github/bstenm/route-planner-draft/badge.svg?branch=master)](https://coveralls.io/github/bstenm/route-planner?branch=master) [![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=bstenm/route-planner)](https://dependabot.com)
 
 #### Running the app
 
