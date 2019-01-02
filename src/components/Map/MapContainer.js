@@ -9,8 +9,10 @@ import './MapContainer.css';
 export class MapContainer extends React.Component {
       componentDidUpdate(prevProps) {
             const { Leaflet, googleMap, waypointList } = this.props;
+
             // initialse the map once the Leaflet and Google map libs have been loaded
             if (
+                  !this.error &&
                   Leaflet &&
                   googleMap &&
                   (prevProps.Leaflet !== Leaflet ||
@@ -133,16 +135,26 @@ export class MapContainer extends React.Component {
       };
 
       render() {
+            const { leafletError, googleMapError } = this.props;
+            const error = leafletError || googleMapError;
             return (
-                  <>
-                        <div
-                              ref={node => {
-                                    this.node = node;
-                              }}
-                              className="MapContainer"
-                        />
-                        <div className="MapContainer__loader" />
-                  </>
+                  <div className="MapContainer">
+                        {error ? (
+                              <span className="MapContainer__error">
+                                    {error} :(
+                              </span>
+                        ) : (
+                              <>
+                                    <div
+                                          ref={node => {
+                                                this.node = node;
+                                          }}
+                                          className="MapContainer__map"
+                                    />
+                                    <div className="MapContainer__loader" />
+                              </>
+                        )}
+                  </div>
             );
       }
 }
@@ -150,11 +162,15 @@ export class MapContainer extends React.Component {
 MapContainer.defaultProps = {
       Leaflet: null,
       googleMap: null,
+      leafletError: null,
+      googleMapError: null,
       waypointList: [],
 };
 
 MapContainer.propTypes = {
       Leaflet: PropTypes.object,
+      leafletError: PropTypes.string,
+      googleMapError: PropTypes.string,
       googleMap: PropTypes.object,
       waypointList: PropTypes.array,
       addWaypoint: PropTypes.func.isRequired,

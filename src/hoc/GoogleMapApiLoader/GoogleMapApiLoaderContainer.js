@@ -9,6 +9,7 @@ export const wrapper = WrappedComponent => {
                   super(props);
                   this.state = {
                         googleMap: null,
+                        googleMapError: null,
                   };
             }
 
@@ -17,10 +18,17 @@ export const wrapper = WrappedComponent => {
                         success: () => {
                               this.setState({
                                     googleMap: window.google.maps,
+                                    googleMapError: null,
                               });
                         },
                         error: () => {
-                              log.error('Could not load the Leaflet library.');
+                              const googleMapError =
+                                    'Could not load the Google Elevation Service';
+                              log.error(googleMapError);
+                              this.setState({
+                                    googleMapError,
+                                    googleMap: null,
+                              });
                         },
                   });
             }
@@ -40,9 +48,7 @@ export const wrapper = WrappedComponent => {
             };
 
             render() {
-                  const props = Object.assign({}, this.props, {
-                        googleMap: this.state.googleMap,
-                  });
+                  const props = Object.assign({}, this.props, this.state);
                   return <WrappedComponent {...props} />;
             }
       }

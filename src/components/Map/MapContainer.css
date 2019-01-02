@@ -1,5 +1,18 @@
-.MapContainer {
+.MapContainer{
       width: 100%;
+}
+
+.MapContainer__map {
+      height: 100%;
+}
+
+.MapContainer__error {
+      padding: 8px;
+      color: red;
+      font-size: 17px;
+      position: fixed;
+      top: 50%;
+      transform: translate(-50%, -50%);
 }
 
 .MapContainer__loader {

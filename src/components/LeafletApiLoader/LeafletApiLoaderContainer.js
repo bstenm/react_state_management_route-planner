@@ -7,6 +7,7 @@ import log from '../../services/Log';
 export class LeafletApiLoaderContainer extends React.Component {
       state = {
             Leaflet: null,
+            leafletError: null,
       };
 
       componentDidMount() {
@@ -28,10 +29,16 @@ export class LeafletApiLoaderContainer extends React.Component {
                   success: () => {
                         this.setState({
                               Leaflet: window.L,
+                              leafletError: null,
                         });
                   },
                   error: () => {
-                        log.error('Could not load the Leaflet library.');
+                        const leafletError = 'Could not load the map';
+                        log.error(leafletError);
+                        this.setState({
+                              leafletError,
+                              Leaflet: null,
+                        });
                   },
             });
       }

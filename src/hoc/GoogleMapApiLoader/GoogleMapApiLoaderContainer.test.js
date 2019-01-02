@@ -44,8 +44,8 @@ it('Passes its props to wrapped component', () => {
       expect(wrapper.find(Component).props().random).toEqual('prop');
 });
 
-// Component prop: googleMap
-it('Passes googleMap to the wrapped component', () => {
+// Load
+it('Attempts to load the google map api', () => {
       const { googleMap } = wrapper.find(Component).props();
 
       expect(googleMap).toEqual({ gogleMap: 'api' });
@@ -59,13 +59,27 @@ it('Passes googleMap to the wrapped component', () => {
       );
 });
 
-// loadjs
-it('Logs an error if  the Google Map Api could not be loaded', () => {
+// Success
+it('Passes the Google Map Api to thhe wrapped component', () => {
+      expect(wrapper.find(Component).props().googleMapError).toEqual(null);
+      expect(wrapper.find(Component).props().googleMap).toEqual({
+            gogleMap: 'api',
+      });
+});
+
+// Error
+it('Logs and passes an error if  the Google Map Api could not be loaded', () => {
       loadjs.mockImplementation((_, options) => {
             // simulate could not load Google Map Api
             options.error();
       });
+
       const WrappedComponent = GoogleMapApiLoaderContainer(Component);
-      shallow(<WrappedComponent {...props} />);
+      wrapper = shallow(<WrappedComponent {...props} />);
+
       expect(log.error).toHaveBeenCalledTimes(1);
+      expect(wrapper.find(Component).props().googleMap).toEqual(null);
+      expect(wrapper.find(Component).props().googleMapError).toEqual(
+            expect.any(String),
+      );
 });

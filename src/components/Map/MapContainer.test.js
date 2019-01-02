@@ -89,8 +89,6 @@ beforeEach(() => {
       };
 
       props = {
-            Leaflet: null,
-            googleMap: null,
             waypointList: [],
             addWaypoint: jest.fn(),
             updateWaypoint: jest.fn(),
@@ -101,6 +99,7 @@ beforeEach(() => {
 // MapContainer
 it('Displays a MapContainer', () => {
       const wrapper = shallow(<MapContainer {...props} />);
+
       expect(wrapper.find('.MapContainer')).toHaveLength(1);
 });
 
@@ -114,6 +113,7 @@ it('Displays a loader', () => {
 it('Does not try to display a map if Leaflet API not loaded yet', () => {
       const wrapper = shallow(<MapContainer {...props} />);
       wrapper.setProps({ Leaflet: null, googleMap: {} });
+
       expect(LeafletMock.map).toHaveBeenCalledTimes(0);
 });
 
@@ -121,7 +121,34 @@ it('Does not try to display a map if Leaflet API not loaded yet', () => {
 it('Does not try to display a map if the Google Map API not loaded yet', () => {
       const wrapper = shallow(<MapContainer {...props} />);
       wrapper.setProps({ Leaflet: LeafletMock });
+
       expect(LeafletMock.map).toHaveBeenCalledTimes(0);
+});
+
+// Displays an error
+it('Dispaly an error message if could not load leaflet lib', () => {
+      const wrapper = shallow(<MapContainer {...props} />);
+
+      // simulate leaflet loading error
+      wrapper.setProps({ leafletError: 'leaflet error' });
+
+      expect(LeafletMock.map).toHaveBeenCalledTimes(0);
+      expect(wrapper.find('.MapContainer__error').text()).toContain(
+            'leaflet error',
+      );
+});
+
+// Displays an error
+it('Dispaly an error message if could not load google map api', () => {
+      const wrapper = shallow(<MapContainer {...props} />);
+
+      // simulate google map api loading error
+      wrapper.setProps({ googleMapError: 'google map error' });
+
+      expect(LeafletMock.map).toHaveBeenCalledTimes(0);
+      expect(wrapper.find('.MapContainer__error').text()).toContain(
+            'google map error',
+      );
 });
 
 // Displays a map

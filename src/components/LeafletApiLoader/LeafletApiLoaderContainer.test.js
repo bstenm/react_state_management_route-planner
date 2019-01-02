@@ -38,7 +38,9 @@ it('Attempts to load the Leaflet CSS and then its JS', () => {
             // simulate Leaflet successfully loaded
             options.success();
       });
+
       shallow(<LeafletApiLoaderContainer {...props} />);
+
       expect(loadjs).toHaveBeenCalledWith(
             ['LeafletCssEndpoint', 'LeafletJsEndpoint'],
             expect.objectContaining({
@@ -54,8 +56,14 @@ it('Logs an error if  the Leaflet library could not be loaded', () => {
             // simulate could not load Leaflet
             options.error();
       });
+
       shallow(<LeafletApiLoaderContainer {...props} />);
+
       expect(log.error).toHaveBeenCalledTimes(1);
+      expect(props.children).toHaveBeenCalledWith({
+            Leaflet: null,
+            leafletError: expect.any(String),
+      });
 });
 
 it('Calls the children prop with the leaflet api', () => {
@@ -63,6 +71,11 @@ it('Calls the children prop with the leaflet api', () => {
             // simulate Leaflet successfully loaded
             options.success();
       });
+
       shallow(<LeafletApiLoaderContainer {...props} />);
-      expect(props.children).toHaveBeenCalledWith({ Leaflet: { map: 'api' } });
+
+      expect(props.children).toHaveBeenCalledWith({
+            Leaflet: { map: 'api' },
+            leafletError: null,
+      });
 });
