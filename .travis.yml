@@ -19,6 +19,7 @@ install:
 script:
       - yarn test --coverage --coverageReporters=text-lcov --detectOpenHandles --forceExit | coveralls
       - yarn build
+
 deploy:
       provider: s3
       access_key_id: "AKIAJCJNSV4XCNS3UQAQ"
@@ -26,5 +27,4 @@ deploy:
       local_dir: build
       on:
             branch: master
-      secret_access_key:
-            secure: eoxWGjgKekig9YDp4iCg35nugqgJ+YAdgyGfbDdFKCzxTtcsZcMmH1/yP7ur80j2W9ghKaOReJT+I7JvU5bj+wk8Rg83oc6ZYKkorGP1UfMLloLx/gR1ZLfTH70+04cAKzE9sS2rE33bOYN/A8QoBIyfI94tmZV1l0DNoERSkGIShXm/lN7WX+BIpda8YjSlGn8NGq6E6TPhbDfoYCm8FpMz2JAApazAtFl50/zSoWkrPm5250tCXYc+2B7MFIxdpzoqhPqrZddB/EXCb4E3mWqVNJSEoXIXC9B+66teGCw0G5NHOLw6uhE2+qkF7KCWjS8/OU39EeQZCQGY0wB5uc0EykXen2WGh3CjIN7wc+rq+M38oMt4r9zjB5VPF9FlWDIrZYkOZxsaLIlLoleGBy3oUhjHhtp6t+0b5fuYMpavyZlw5wGUJv82XpspbtiHvGsBQ/vUO305ADojBFlvkU9peQDAeA/obQHQANThFsISw7MOZ1c+IEuH81z7aybKLpwTHupnFEvrJJvi00QFK8ZHdtd7Z7vGIKIccf4VeMbKYtIku2s9trgbPfGwG3xZbh6D3t01sAL2hfhJmL557yoU8EGF7EMkD6paAxmKsxY5i43mlh0JleBcaUqsnqMJRq/jLKI0+qZqT+y3wZ5pyb45FprBYvq+MsMv7KkZYs0=
+      secret_access_key: "omAO3oaxrNUydPpSxfHGtg7y4URuiOez5bTXZy1P"
