@@ -25,6 +25,7 @@ deploy:
       access_key_id: "AKIAJUERDPZC5WLZK7OA"
       bucket: "my-route-planner"
       local_dir: build
+      skip_cleanup: true
       on:
             branch: master
       secret_access_key:
