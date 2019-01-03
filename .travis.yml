@@ -27,4 +27,4 @@ deploy:
       local_dir: build
       on:
             branch: master
-      secret_access_key: "omAO3oaxrNUydPpSxfHGtg7y4URuiOez5bTXZy1P"
+      secret_access_key: omAO3oaxrNUydPpSxfHGtg7y4URuiOez5bTXZy1P
