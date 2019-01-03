@@ -26,21 +26,17 @@ export class WaypointListContainer extends React.Component {
 
       onDrop = e => {
             e.preventDefault();
+            let { id } = e.target;
+            id = id !== '' && id;
 
             this.setState({ draggedOnId: null });
 
             const draggedId = e.dataTransfer.getData('text/plain');
-            const droppedOnId = e.target.id;
-            // eslint-disable-next-line no-console
-            console.log(
-                  '>>>>',
-                  droppedOnId,
-                  droppedOnId === '',
-                  droppedOnId === null,
-                  droppedOnId === undefined,
-            );
+            const droppedOnId = id !== false && parseInt(id, 10);
+
             // do nothing if we drop item onto itself or outside list
-            if (draggedId === droppedOnId || droppedOnId === '') return;
+            // ! use comparison to false as droppedOnId could be 0
+            if (draggedId === droppedOnId || droppedOnId === false) return;
 
             // dispatch action
             this.props.sortWaypoints({ draggedId, droppedOnId });
