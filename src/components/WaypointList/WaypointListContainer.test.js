@@ -59,7 +59,7 @@ it('Passes a cb prop to remove a waypoint to WaypointList component', () => {
 
 // WaypointList prop: onDragStart
 it('Passes a cb prop for the drag start event to WaypointList component', () => {
-      const eventMock = getEventMock(2);
+      const eventMock = getEventMock('2');
       const { setData } = eventMock.dataTransfer;
 
       wrapper
@@ -73,7 +73,7 @@ it('Passes a cb prop for the drag start event to WaypointList component', () => 
 
 // WaypointList prop: onDrop
 it('Dispatches a sort waypoint action on drop item event', () => {
-      const eventMock = getEventMock(1);
+      const eventMock = getEventMock('1');
       const { preventDefault, dataTransfer } = eventMock;
       wrapper
             .find(WaypointList)
@@ -93,7 +93,7 @@ it('Dispatches a sort waypoint action on drop item event', () => {
 
 // WaypointList prop: onDrop
 it('Does not dispatch a sort waypoint action on drop item event if the item dragged id is equal to the item dropped on id', () => {
-      const eventMock = getEventMock(3);
+      const eventMock = getEventMock('3');
       const { preventDefault, dataTransfer } = eventMock;
       wrapper
             .find(WaypointList)
@@ -104,6 +104,18 @@ it('Does not dispatch a sort waypoint action on drop item event if the item drag
 
       expect(dataTransfer.getData).toHaveBeenCalledTimes(1);
       expect(dataTransfer.getData).toHaveBeenCalledWith('text/plain');
+
+      expect(props.sortWaypoints).not.toHaveBeenCalled();
+});
+
+// WaypointList prop: onDrop
+it('Does not dispatch a sort waypoint action on drop item event if the item is dopped outside the waypointlist', () => {
+      // simulate dropping outside waypoint list
+      const eventMock = getEventMock('');
+      wrapper
+            .find(WaypointList)
+            .props()
+            .onDrop(eventMock);
 
       expect(props.sortWaypoints).not.toHaveBeenCalled();
 });
