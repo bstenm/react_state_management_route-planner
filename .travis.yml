@@ -22,9 +22,9 @@ script:
 
 deploy:
       provider: s3
-      access_key_id: "AKIAJCJNSV4XCNS3UQAQ"
+      access_key_id: "AKIAJUERDPZC5WLZK7OA"
       bucket: "my-route-planner"
       local_dir: build
       on:
             branch: master
-      secret_access_key: omAO3oaxrNUydPpSxfHGtg7y4URuiOez5bTXZy1P
+      secret_access_key: "omAO3oaxrNUydPpSxfHGtg7y4URuiOez5bTXZy1P"
