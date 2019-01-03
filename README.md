@@ -19,23 +19,23 @@ In a real life prject I would probably have used:
 
 - The waypoints are managed by [Redux](https://redux.com) for showcasing: Redux is overkill for such a small app but most apps don't stay that small for very long.
 
-- The geo json data (used to create the gpx) is managed by React Context.  for such a small app I would probably use React Context for all state management (including for the waypoints) in normal circumstances.
+- The geo json data (used to create the gpx) is managed by React Context.  for such a small app I would probably use React Context for all state management (including for the waypoints) in a real live situation.
 
 ### Apis
 
-- The [Leaflet Api](leaflet-api) is used for the map interactivity, the [Google Map Api loader](google-map-api)  is only used to provide elevation data for each waypoint.
+- The [Leaflet Api](http://leafletjs.com) is used for the map interactivity, the [Google Map Api loader](https://cloud.google.com/maps-platform/)  is only used to provide elevation data for each waypoint.
 
-- There should be security considerations when using an Api key for the [Google Map Api loader](google-map-api) for any project: see [Securing an API key](https://cloud.google.com/docs/authentication/api-keys#securing_an_api_key). In fact it is recommended to use [Service accounts](https://cloud.google.com/docs/authentication/getting-started) instead.
+- There should be security considerations when using an Api key for the [Google Map Api loader](https://cloud.google.com/maps-platform/) for any project: see [Securing an API key](https://cloud.google.com/docs/authentication/api-keys#securing_an_api_key). In fact it is recommended to use [Service accounts](https://cloud.google.com/docs/authentication/getting-started) instead.
 
 ### HOC vs Render Prop
 
-- The [Google Map Api loader](google-map-api) is written as a high order component but the [Leaflet Api](leaflet-api) is written using the Render Prop patterm.  This is again for showcasing: both patterns serve the same purpose.
+The [Google Map Api loader](https://cloud.google.com/maps-platform/) is written as a high order component but the [Leaflet Api](http://leafletjs.com) is written using the Render Prop patterm.  This is again for showcasing: both patterns serve the same purpose.
 
 For a presentation on the Render Prop pattern see [Render Props vs HOC (video)](https://www.youtube.com/watch?v=BcVAq3YFiuc).
 
 ### Note on performance
 
-We request the elevation data each time a new waypoint is chosen/updated. It introduces a slight delay the showing but that is negligible and worth it as the elevation data is valuable information for a cross country route.
+We request the elevation data each time a new waypoint is chosen/updated. It slightly delays the showing fo the marker but that is negligible and worth it as the elevation data is valuable information for a cross country route.
 
 ### Note on test writing style
 
@@ -49,11 +49,11 @@ After each push to the [Git](https://github.com/bstenm/route-planner) repository
 - Run the tests
 - Send the coverage report to [Coveralls](https://coveralls.io/)
 - Run the build process
-- Deploy it to [AWS S3](https://aws.amazon.com/s3/). It will be hosted on that link: [Route Planner](my-route-planner.s3-website-us-east-1.amazonaws.com).
+- Deploy it to [AWS S3](https://aws.amazon.com/s3/). It will be hosted on that link: [Route Planner](https://my-route-planner.s3-website-us-east-1.amazonaws.com).
 
 ### Git hook
 
-[Husky](https://www.npmjs.com/package/husky) runs the linter on the files staged before any git commit.
+[Husky](https://www.npmjs.com/package/husky) runs the linter on the files staged on each any git commit.
 
 ## Commands
 
@@ -80,7 +80,3 @@ Builds the app for production to the `build` folder.<br>
 It correctly bundles React in production mode and optimizes the build for the best performance.
 
 The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
-
-[google-map-api]: https://cloud.google.com/maps-platform/
-[leaflet-api]: leafletjs.com
