@@ -31,7 +31,14 @@ export class WaypointListContainer extends React.Component {
 
             const draggedId = e.dataTransfer.getData('text/plain');
             const droppedOnId = e.target.id;
-
+            // eslint-disable-next-line no-console
+            console.log(
+                  '>>>>',
+                  droppedOnId,
+                  droppedOnId === '',
+                  droppedOnId === null,
+                  droppedOnId === undefined,
+            );
             // do nothing if we drop item onto itself or outside list
             if (draggedId === droppedOnId || droppedOnId === '') return;
 
