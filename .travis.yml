@@ -27,4 +27,6 @@ deploy:
       local_dir: build
       on:
             branch: master
-      secret_access_key: "omAO3oaxrNUydPpSxfHGtg7y4URuiOez5bTXZy1P"
+      secret_access_key:
+            secure: hf8r985KuPCcQLLF3MOBCLFO1N8RNJPSHZAC0GeVQYNuHrc20+xkU4/8kd++QmWY+HOJIktmzk0vk5m6IQhdHfCO5rkPL1dz3Pno3Adkc+yY4+GSJnOKRq/r3lEB6BnJ01WywjoHc/g4RiadIXr53n+Q9IDJpfIShRaAWjiHnCysGGq017O4yjbfjf7nA+xWs9xCQnkOnP8W26Mtpa8ED7s4Jjivb56mV4cLpXYNwZH1S/2M0mPyQzsLmztCAvsaecSHcDAS0cqcYcjhRunio8Cq+SBtxtLUtSuD7yvX5moLHwY5MtUK4iLsrYxeDv/y0b3KuhGlmpqO9WK33Cy1ITG/ghZ2FAN7AcLKhU1Z0tEZHhteQmGftOz7TwZgbfPXa1Mp1w2LUyBV2J4XNNnx+ohej0DRM4NNIiro1n8Zbs3GX/bAQgCJmW1f9/w2bK5de9/pYui8h6WizyKni4avO3AIlmsZ1+VeDtTYCAOg4ZHTbc+Yp90Xje5uMwt1Ld0jyGCt5ewCyivQEKf2eKOHNKMnGEgUILiBmxvR0FdJUA0cJyOeMgjKcfddjimWd/DTWhZVmFOZQ4HpqQbJ+ACUsF/h9RiPqUsE/RwwvtW9neap1Nqs3fbocfd6mRhs9ZY+kjVsr+pnCdbblIyrHdXgq0vcC/fd23eTuUpbeUWq924=
+
