@@ -1,5 +1,3 @@
-// eslint-disable-next-line no-console
-console.log('>>>>', window.navigator);
 export default () =>
       // no reject function as we fail silently
       new Promise(resolve => {
@@ -9,8 +7,14 @@ export default () =>
 
             window.navigator.geolocation.getCurrentPosition(
                   ({ coords: { latitude: lat, longitude: lng } }) => {
+                        // eslint-disable-next-line no-console
+                        console.log('>>>>', lat, lng);
                         resolve({ lat, lng });
                   },
-                  () => resolve({}),
+                  () => {
+                        // eslint-disable-next-line no-console
+                        console.log('>>>> FAILED');
+                        resolve({});
+                  },
             );
       });
