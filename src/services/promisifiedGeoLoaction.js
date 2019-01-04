@@ -1,3 +1,5 @@
+// eslint-disable-next-line no-console
+console.log('>>>>', window.navigator);
 export default () =>
       // no reject function as we fail silently
       new Promise(resolve => {
