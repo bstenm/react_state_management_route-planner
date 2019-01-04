@@ -57,6 +57,24 @@ After each push to the [Git](https://github.com/bstenm/route-planner) repository
 
 [Husky](https://www.npmjs.com/package/husky) runs the linter on the files staged on each any git commit.
 
+### Things to improve
+
+- We could add a toggle button to include elevation data or not.
+
+- We could add a way to visualise the elevation data with this [plugin](http://mrmufflon.github.io/Leaflet.Elevation/example/example.html).
+
+- We could add an estimation of the time a regular runner would take to complete the route.
+
+- We could save the route into a database and add a dropdown to display all the routes saved.
+
+- We could add a way to rate a route after the user completed it, then make that data available to other users.
+
+- We could add subscriptions and give the ability to users to send invites to each other with a date and time.
+
+- etc
+
+- There is a little bug with the highlighting of the waypoint during the drag and drop in the waypoint right panel: when you drag an item from the list and drop it into the map the highlighting persist: I just didn't take the time to fix it yet but that shouldn't be too difficult.
+
 ## Commands
 
 ##### `yarn prettier`
