@@ -1,6 +1,10 @@
 import React from 'react';
 import { shallow } from 'enzyme';
+import geoLocation from '../../services/promisifiedGeoLoaction';
 import { MapContainer } from './MapContainer';
+
+// mock the geolocation service
+jest.mock('../../services/promisifiedGeoLoaction');
 
 // mock the config
 jest.mock('../../config', () => ({
@@ -152,19 +156,28 @@ it('Dispaly an error message if could not load google map api', () => {
 });
 
 // Displays a map
-it('Uses Leaflet to display a map when Leaflet and Google Map Api are loaded', () => {
+it('Uses Leaflet to display a map centered on user location when Leaflet and Google Map Api are loaded', async () => {
+      geoLocation.mockImplementation(() =>
+            Promise.resolve({
+                  lat: 'userLatitude',
+                  lng: 'userLongitude',
+            }),
+      );
+
       const wrapper = shallow(<MapContainer {...props} />);
       wrapper.setProps({
             Leaflet: LeafletMock,
             googleMap: { some: 'api' },
       });
 
+      await geoLocation();
+
       expect(LeafletMock.map).toHaveBeenCalledTimes(1);
 
       // display map
       expect(mapObject.setView).toHaveBeenCalledTimes(1);
       expect(setViewMock).toHaveBeenCalledWith(
-            ['latitude', 'longitude'],
+            ['userLatitude', 'userLongitude'],
             'zoom',
       );
 
@@ -185,8 +198,29 @@ it('Uses Leaflet to display a map when Leaflet and Google Map Api are loaded', (
       expect(tileLayerAddToMock).toHaveBeenCalledWith(mapObject);
 });
 
+// Centers map
+it('Centers the map to the default location if no user location found', async () => {
+      // simulate no user location found
+      geoLocation.mockImplementation(() => Promise.resolve({}));
+
+      const wrapper = shallow(<MapContainer {...props} />);
+      wrapper.setProps({
+            Leaflet: LeafletMock,
+            googleMap: { some: 'api' },
+      });
+
+      await geoLocation();
+
+      expect(setViewMock).toHaveBeenCalledWith(
+            ['latitude', 'longitude'],
+            'zoom',
+      );
+});
+
 // Dispatches action to add waypoint
-it('Dispatches an action with lat and lng and elevation of the new waypoint', () => {
+it('Dispatches an action with lat and lng and elevation of the new waypoint', async () => {
+      geoLocation.mockImplementation(() => Promise.resolve({}));
+
       const wrapper = shallow(<MapContainer {...props} />);
       wrapper.setProps({
             Leaflet: LeafletMock,
@@ -199,6 +233,8 @@ it('Dispatches an action with lat and lng and elevation of the new waypoint', ()
                   },
             },
       });
+
+      await geoLocation();
 
       // simulate click event on map
       mapObject.fireClickEvent({
@@ -214,7 +250,9 @@ it('Dispatches an action with lat and lng and elevation of the new waypoint', ()
 });
 
 // Dispatches action to add waypoint
-it('Displatches an action with only lat and lng if no elevation returned by google api', () => {
+it('Displatches an action with only lat and lng if no elevation returned by google api', async () => {
+      geoLocation.mockImplementation(() => Promise.resolve({}));
+
       const wrapper = shallow(<MapContainer {...props} />);
       wrapper.setProps({
             Leaflet: LeafletMock,
@@ -227,6 +265,8 @@ it('Displatches an action with only lat and lng if no elevation returned by goog
                   },
             },
       });
+
+      await geoLocation();
 
       // simulate click event on map
       mapObject.fireClickEvent({

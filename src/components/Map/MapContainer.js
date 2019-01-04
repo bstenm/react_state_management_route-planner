@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import getUserLocation from '../../services/promisifiedGeoLoaction';
 import cf from '../../config';
 import GoogleMapApiLoader from '../../hoc/GoogleMapApiLoader';
 import { addWaypoint, updateWaypoint } from '../../actions/waypoints';
@@ -31,14 +32,17 @@ export class MapContainer extends React.Component {
             }
       }
 
-      initialiseMap = () => {
+      initialiseMap = async () => {
             const { Leaflet } = this.props;
             const { latitude, longitude, zoom, tileLayer } = cf;
             const { url, ...rest } = tileLayer;
 
-            // display map
+            // no try catch as we fail silently
+            const { lat, lng } = await getUserLocation();
+
+            // display map centered on user location if found
             this.map = Leaflet.map(this.node);
-            this.map.setView([latitude, longitude], zoom);
+            this.map.setView([lat || latitude, lng || longitude], zoom);
 
             // use tile layer from Mapbox (https://www.mapbox.com)
             Leaflet.tileLayer(url, {
