@@ -7,14 +7,8 @@ export default () =>
 
             window.navigator.geolocation.getCurrentPosition(
                   ({ coords: { latitude: lat, longitude: lng } }) => {
-                        // eslint-disable-next-line no-console
-                        console.log('>>>>', lat, lng);
                         resolve({ lat, lng });
                   },
-                  () => {
-                        // eslint-disable-next-line no-console
-                        console.log('>>>> FAILED');
-                        resolve({});
-                  },
+                  () => resolve({}),
             );
       });

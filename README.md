@@ -7,6 +7,8 @@ A cross-country route planner without 3rd party libraries.
 
 Click here for a [Youtube video demo](https://www.youtube.com/watch?v=OSRMuN44pEE&feature=youtu.be)
 
+**Note**: The app attempts to center the map at the user's location but it will not work on the demo as the HTML5 geolocation is not supported from pages delivered by [non-secure connections](https://developers.google.com/web/updates/2016/04/geolocation-on-secure-contexts-only) (http as opposed to https). However the demo is simply hosted on AWS S3 and therefore is unsecured (That could be fixed by setting up [Cloudfront](https://aws.amazon.com/cloudfront) and pointing it to our S3 bucket).
+
 ## No 3rd party React Components
 
 In a real life prject I would probably have used:
