@@ -1,5 +1,5 @@
 
-A cross-country route planner without 3rd party libraries.
+Playing with the [LeafletJS Api](http://leafletjs.com) : A React cross-country route planner without 3rd party components.
 
 [![Build Status](https://travis-ci.org/bstenm/route-planner.svg?branch=master)](https://travis-ci.org/bstenm/route-planner) [![Coverage Status](https://coveralls.io/repos/github/bstenm/route-planner-draft/badge.svg?branch=master)](https://coveralls.io/github/bstenm/route-planner?branch=master) [![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=bstenm/route-planner)](https://dependabot.com)
 
