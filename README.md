@@ -7,7 +7,9 @@ A cross-country route planner without 3rd party libraries.
 
 Click here for a [Youtube video demo](https://www.youtube.com/watch?v=OSRMuN44pEE&feature=youtu.be)
 
-## No 3rd party React Components
+## Design choices
+
+### No 3rd party React Components
 
 The waypoints drag and drop is a custom one I build just for fun. I didn't use any 3rd party components such as [React Beautiful Dnd](https://github.com/atlassian/react-beautiful-dnd).
       
@@ -17,7 +19,7 @@ Using 3 different ways to do state management, just for fun.
 
 - The waypoints are managed by [Redux](https://redux.com).
 - The geo json data (used to create the gpx) is managed by React Context.
-- The drag and drop uses local state too. 
+- The drag and drop, the google api loader and the leaflet api loader use local state. 
 
 ### Apis
 
