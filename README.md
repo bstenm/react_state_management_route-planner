@@ -7,6 +7,10 @@ A cross-country route planner without 3rd party libraries.
 
 Click here for a [Youtube video demo](https://www.youtube.com/watch?v=OSRMuN44pEE&feature=youtu.be)
 
+## No 3rd party React Components
+
+The waypoints drag and drop is a custom one I build just for fun. I didn't use any 3rd party components such as [React Beautiful Dnd](https://github.com/atlassian/react-beautiful-dnd).
+      
 ### Playing with state mangement
 
 Using 3 diferent ways to do state management, just for fun.
@@ -44,6 +48,8 @@ After each push to the [Git](https://github.com/bstenm/route-planner) repository
 - Send the coverage report to [Coveralls](https://coveralls.io/)
 - Run the build process
 - Deploy it to [AWS S3](https://aws.amazon.com/s3/). It will be hosted on that link: [Route Planner](https://my-route-planner.s3-website-us-east-1.amazonaws.com).
+
+**Note**: The app attempts to center the map at the user's location but it will not work on the demo as the HTML5 geolocation is not supported from pages delivered by [non-secure connections](https://developers.google.com/web/updates/2016/04/geolocation-on-secure-contexts-only) (http as opposed to https). However the demo is simply hosted on AWS S3 and therefore is unsecured (That could be fixed by setting up [Cloudfront](https://aws.amazon.com/cloudfront) and pointing it to our S3 bucket).
 
 ### Git hook
 
