@@ -35,7 +35,7 @@ For a presentation on the Render Prop pattern see [Render Props vs HOC (video)](
 
 ### Note on performance
 
-We request the elevation data each time a new waypoint is chosen/updated. It slightly delays the showing fo the marker but that is negligible and worth it as the elevation data is valuable information for a cross country route.
+We request the elevation data each time a new waypoint is chosen/updated. It slightly delays the showing of the marker but that is negligible and worth it as the elevation data is valuable information for a cross country route.
 
 ### Note on test writing style
 
