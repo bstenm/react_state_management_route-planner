@@ -27,7 +27,7 @@ Using 3 different ways to do state management, just for fun.
 
 ### HOC vs Render Prop
 
-The [Google Map Api loader](https://cloud.google.com/maps-platform/) is written as a high order component but the [Leaflet Api](http://leafletjs.com) is written using the Render Prop patterm.  This is again for showcasing: both patterns serve the same purpose.
+The [Google Map Api loader](https://cloud.google.com/maps-platform/) is written as a high order component but the [Leaflet Api](http://leafletjs.com) is written using the Render Prop patterm. Both patterns serve the same purpose.
 
 For a presentation on the Render Prop pattern see [Render Props vs HOC (video)](https://www.youtube.com/watch?v=BcVAq3YFiuc).
 
