@@ -7,21 +7,13 @@ A cross-country route planner without 3rd party libraries.
 
 Click here for a [Youtube video demo](https://www.youtube.com/watch?v=OSRMuN44pEE&feature=youtu.be)
 
-**Note**: The app attempts to center the map at the user's location but it will not work on the demo as the HTML5 geolocation is not supported from pages delivered by [non-secure connections](https://developers.google.com/web/updates/2016/04/geolocation-on-secure-contexts-only) (http as opposed to https). However the demo is simply hosted on AWS S3 and therefore is unsecured (That could be fixed by setting up [Cloudfront](https://aws.amazon.com/cloudfront) and pointing it to our S3 bucket).
+### Playing with state mangement
 
-## No 3rd party React Components
+Using 3 diferent ways to do state management, just for fun.
 
-In a real life prject I would probably have used:
-      - [React Beautiful Dnd](https://github.com/atlassian/react-beautiful-dnd) for the waypoints drag and drop
-      - [React Bootstrap](https://react-bootstrap.github.io/) for responsive layout
-
-## Design Choices
-
-### React Context vs Redux (state mangement)
-
-- The waypoints are managed by [Redux](https://redux.com) for showcasing: Redux is overkill for such a small app but most apps don't stay that small for very long.
-
-- The geo json data (used to create the gpx) is managed by React Context.  for such a small app I would probably use React Context for all state management (including for the waypoints) in a real live situation.
+- The waypoints are managed by [Redux](https://redux.com).
+- The geo json data (used to create the gpx) is managed by React Context.
+- The drag and drop uses local state too. 
 
 ### Apis
 
@@ -59,21 +51,15 @@ After each push to the [Git](https://github.com/bstenm/route-planner) repository
 
 ### Things to improve
 
-- We could add a toggle button to include elevation data or not.
+- Add a toggle button to include elevation data or not.
+- Add a way to visualise the elevation data with this [plugin](http://mrmufflon.github.io/Leaflet.Elevation/example/example.html).
+- Add an estimation of the time a regular runner would take to complete the route.
+- Save the route into a database and add a dropdown to display all the routes saved.
+- Add a way to rate a route after the user completed it, then make that data available to other users.
+- Add subscriptions and give the ability to users to send invites to each other with a date and time.
 
-- We could add a way to visualise the elevation data with this [plugin](http://mrmufflon.github.io/Leaflet.Elevation/example/example.html).
 
-- We could add an estimation of the time a regular runner would take to complete the route.
-
-- We could save the route into a database and add a dropdown to display all the routes saved.
-
-- We could add a way to rate a route after the user completed it, then make that data available to other users.
-
-- We could add subscriptions and give the ability to users to send invites to each other with a date and time.
-
-- etc
-
-- There is a little bug with the highlighting of the waypoint during the drag and drop in the waypoint right panel: when you drag an item from the list and drop it into the map the highlighting persist: I just didn't take the time to fix it yet but that shouldn't be too difficult.
+- There is a little bug with the highlighting of the waypoint during the drag and drop in the waypoint right panel: when you drag an item from the list and drop it into the map the highlighting persist. Will fix it when I get a chance.
 
 ## Commands
 
