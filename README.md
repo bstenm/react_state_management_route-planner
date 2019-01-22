@@ -13,7 +13,7 @@ The waypoints drag and drop is a custom one I build just for fun. I didn't use a
       
 ### Playing with state mangement
 
-Using 3 diferent ways to do state management, just for fun.
+Using 3 different ways to do state management, just for fun.
 
 - The waypoints are managed by [Redux](https://redux.com).
 - The geo json data (used to create the gpx) is managed by React Context.
