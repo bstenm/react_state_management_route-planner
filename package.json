@@ -7,7 +7,7 @@
   "dependencies": {
     "classnames": "2.2.6",
     "loadjs": "3.5.5",
-    "lodash": "4.17.11",
+    "lodash": "4.17.13",
     "prop-types": "15.6.2",
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
